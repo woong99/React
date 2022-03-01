@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 import './TodoInsert.scss';
+import { firestore } from './firebase';
 
 const TodoInsert = ({ onInsert }) => {
   const [value, setValue] = useState('');
@@ -11,6 +12,12 @@ const TodoInsert = ({ onInsert }) => {
 
   const onSubmit = useCallback(
     (e) => {
+      e.preventDefault();
+      firestore.collection('test').add({
+        text: value,
+        timestamp: new Date().getTime(),
+        checked: false,
+      });
       onInsert(value);
       setValue(''); // value 값 초기화
 
