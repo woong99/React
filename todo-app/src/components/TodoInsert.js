@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
-import './TodoInsert.scss';
-import { firestore } from './firebase';
+import '../styles/TodoInsert.scss';
+import { firestore } from '../firebase';
 
 const TodoInsert = ({ onInsert }) => {
   const [value, setValue] = useState('');
@@ -13,12 +13,13 @@ const TodoInsert = ({ onInsert }) => {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      const timestamp = new Date().getTime();
       firestore.collection('test').add({
         text: value,
-        timestamp: new Date().getTime(),
+        timestamp,
         checked: false,
       });
-      onInsert(value);
+      onInsert(value, timestamp);
       setValue(''); // value 값 초기화
 
       // submit 이벤트는 브라우저에서 새로고침을 발생시킨다.

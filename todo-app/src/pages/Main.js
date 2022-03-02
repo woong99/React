@@ -1,8 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import TodoInsert from './TodoInsert';
-import TodoList from './TodoList';
-import TodoTemplate from './TodoTemplate';
-import { firestore } from './firebase';
+import TodoInsert from '../components/TodoInsert';
+import TodoList from '../components/TodoList';
+import TodoTemplate from '../components/TodoTemplate';
+import { firestore } from '../firebase';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -17,17 +17,19 @@ const App = () => {
             id: doc.id,
             text: doc.data().text,
             checked: doc.data().checked,
+            timestamp: doc.data().timestamp,
           })),
         );
       });
   }, []);
 
   const onInsert = useCallback(
-    (text) => {
+    (text, timestamp) => {
       const todo = {
         id: Math.floor(Math.random() * 100),
         text,
         checked: false,
+        timestamp,
       };
       setTodos(todos.concat(todo));
     },
@@ -50,13 +52,11 @@ const App = () => {
   const onToggle = useCallback(
     (id) => {
       const index = todos.findIndex((i) => i.id === id);
-      // firestore
-      //   .collection('test')
-      //   .doc(id)
-      //   .set({
-
-      //   })
-      console.log(todos[index]);
+      firestore.collection('test').doc(id).set({
+        text: todos[index].text,
+        timestamp: todos[index].timestamp,
+        checked: !todos[index].checked,
+      });
       setTodos(
         todos.map((todo) =>
           todo.id === id ? { ...todo, checked: !todo.checked } : todo,

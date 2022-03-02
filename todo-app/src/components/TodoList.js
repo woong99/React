@@ -1,5 +1,5 @@
 import TodoListItem from './TodoListItem';
-import './TodoList.scss';
+import '../styles/TodoList.scss';
 
 const TodoList = ({ todos, onRemove, onToggle }) => {
   return (

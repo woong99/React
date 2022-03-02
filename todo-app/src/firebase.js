@@ -1,12 +1,19 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import 'firebase/compat/firestore';
+import {
+  // getAuth, // authentication 설정
+  signInWithPopup, // google 로그인을 팝업창에 띄우기 위함
+  GoogleAuthProvider, // google login 기능
+  // email 로그인
+  // email 회원가입
+} from 'https://www.gstatic.com/firebasejs/9.2.0/firebase-auth.js';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyBdOftADdVX8NHG2PTemQxpbD56bE6XH-8',
   authDomain: 'study-firebase-8f6d3.firebaseapp.com',
@@ -20,6 +27,19 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// auth 설정
+const auth = getAuth();
+
+// Email 로그인
+export const signupEmail = (email, password) => {
+  return createUserWithEmailAndPassword(auth, email, password);
+};
+
+// Email 회원가입
+export const loginEmail = (email, password) => {
+  return signInWithEmailAndPassword(auth, email, password);
+};
+
 const firestore = firebase.firestore();
 
-export { firestore };
+export { firestore, auth };
