@@ -3,7 +3,7 @@ import { MdAdd } from 'react-icons/md';
 import '../styles/TodoInsert.scss';
 import { firestore } from '../firebase';
 
-const TodoInsert = ({ onInsert }) => {
+const TodoInsert = ({ onInsert, uid }) => {
   const [value, setValue] = useState('');
 
   const onChange = useCallback((e) => {
@@ -14,7 +14,7 @@ const TodoInsert = ({ onInsert }) => {
     (e) => {
       e.preventDefault();
       const timestamp = new Date().getTime();
-      firestore.collection('test').add({
+      firestore.collection(uid).add({
         text: value,
         timestamp,
         checked: false,

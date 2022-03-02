@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Container } from 'react-bootstrap';
 import { loginEmail, signupEmail } from '../firebase';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassWord] = useState('');
 
@@ -28,11 +29,11 @@ const Login = () => {
   const onSignIn = (e) => {
     e.preventDefault();
     loginEmail(email, password).then((result) => {
-      console.log(result.localId);
-      const user = result.user;
-      console.log('ㅊㅋㅊㅋ' + user);
+      const uid = result.user.uid;
+      navigate('./main', { state: { uid } });
     });
   };
+
   return (
     <div>
       <Link to="./main">Main</Link>

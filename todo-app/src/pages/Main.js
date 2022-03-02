@@ -3,13 +3,16 @@ import TodoInsert from '../components/TodoInsert';
 import TodoList from '../components/TodoList';
 import TodoTemplate from '../components/TodoTemplate';
 import { firestore } from '../firebase';
+import { useLocation } from 'react-router-dom';
 
 const App = () => {
+  const location = useLocation();
+  const uid = location.state.uid;
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     firestore
-      .collection('test')
+      .collection(uid)
       .orderBy('timestamp', 'asc')
       .onSnapshot((data) => {
         setTodos(
@@ -39,7 +42,7 @@ const App = () => {
   const onRemove = useCallback(
     (id) => {
       firestore
-        .collection('test')
+        .collection(uid)
         .doc(id)
         .delete()
         .then(() => {
@@ -52,7 +55,7 @@ const App = () => {
   const onToggle = useCallback(
     (id) => {
       const index = todos.findIndex((i) => i.id === id);
-      firestore.collection('test').doc(id).set({
+      firestore.collection(uid).doc(id).set({
         text: todos[index].text,
         timestamp: todos[index].timestamp,
         checked: !todos[index].checked,
@@ -68,7 +71,7 @@ const App = () => {
 
   return (
     <TodoTemplate>
-      <TodoInsert onInsert={onInsert} />
+      <TodoInsert onInsert={onInsert} uid={uid} />
       <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} />
     </TodoTemplate>
   );
