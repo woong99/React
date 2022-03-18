@@ -4,22 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './redux/store';
-import { addTodo, completeTodo, showComplete } from './redux/actions';
-import ReduxContext from './contexts/ReduxContext';
-
-// store.subscribe(() => {
-//   console.log(store.getState());
-// });
-
-// store.dispatch(addTodo('할일'));
-// store.dispatch(completeTodo(0));
-// store.dispatch(showComplete());
+import { Provider } from 'react-redux';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReduxContext.Provider value={store}>
+    <Provider store={store}>
       <App />
-    </ReduxContext.Provider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
