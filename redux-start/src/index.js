@@ -5,18 +5,21 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './redux/store';
 import { addTodo, completeTodo, showComplete } from './redux/actions';
+import ReduxContext from './contexts/ReduxContext';
 
-store.subscribe(() => {
-  console.log(store.getState());
-});
+// store.subscribe(() => {
+//   console.log(store.getState());
+// });
 
-store.dispatch(addTodo('할일'));
-store.dispatch(completeTodo(0));
-store.dispatch(showComplete());
+// store.dispatch(addTodo('할일'));
+// store.dispatch(completeTodo(0));
+// store.dispatch(showComplete());
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ReduxContext.Provider value={store}>
+      <App />
+    </ReduxContext.Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
