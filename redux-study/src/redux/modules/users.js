@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { push } from 'connected-react-router';
+import { call, delay, put, takeEvery } from 'redux-saga/effects';
 
 // 액션 타입 정의
 
@@ -90,10 +92,12 @@ export default function reducer(state = initialState, action) {
 
   return state;
 }
+
 // redux-thunk
 export function getUsersThunk() {
-  return async (dispatch) => {
+  return async (dispatch, getState, { history }) => {
     try {
+      console.log(history);
       dispatch(getUsersStart());
       const res = await axios.get('https://api.github.com/users');
       dispatch(getUsersSuccess(res.data));
@@ -112,4 +116,28 @@ export function getUsersPromise() {
       return res.data;
     },
   };
+}
+
+// redux-saga
+const GET_USERS_SAGA_START = 'GET_USERS_SAGA_START';
+
+function* getUsersSaga(action) {
+  try {
+    yield put(getUsersStart);
+    yield delay(2000);
+    const res = yield call(axios.get, 'https://api.github.com/users');
+    yield put(getUsersSuccess(res.data));
+    yield put(push('/'));
+  } catch (error) {
+    yield put(getUsersFail(error));
+  }
+}
+export function getUsersSagaStart() {
+  return {
+    type: GET_USERS_SAGA_START,
+  };
+}
+
+export function* usersSage() {
+  yield takeEvery(GET_USERS_SAGA_START, getUsersSaga);
 }
